@@ -41,7 +41,7 @@ main(int argc, char *argv[])
   int ix,iy;
   double xin,yin;
   double xout,yout;
-  double dx,dy;
+  long double dx,dy;
   double **gridx,**gridy;
   char line[LINELENGTH];
   FILE *infp;
@@ -105,11 +105,12 @@ main(int argc, char *argv[])
       dx = xin - ix;
       iy = yin;
       dy = yin - iy;
-      xout = (1-dx)*(1-dy)*gridx[ix][iy] + dx*(1-dy)*gridx[ix+1][iy]
-             + (1-dx)*dy*gridx[ix][iy+1] + dx*dy*gridx[ix+1][iy+1];
-      yout = (1-dx)*(1-dy)*gridy[ix][iy] + dx*(1-dy)*gridy[ix+1][iy]
-             + (1-dx)*dy*gridy[ix][iy+1] + dx*dy*gridy[ix+1][iy+1];
-      printf("%g %g\n",xout,yout);
+
+      xout = (1-dy)*((1-dx)*gridx[ix][iy] + dx*gridx[ix+1][iy]) +
+	     dy*((1-dx)*gridx[ix][iy+1] + dx*gridx[ix+1][iy+1]);
+      yout = (1-dx)*((1-dy)*gridy[ix][iy] + dy*gridy[ix][iy+1]) +
+	     dx*((1-dy)*gridy[ix+1][iy] + dy*gridy[ix+1][iy+1]);
+      printf("%g %g %s",xout,yout,line);
     }
   }
 }
